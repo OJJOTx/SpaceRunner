@@ -1,0 +1,1 @@
+{"name":"moon-salvage","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node --max-old-space-size=128 server.mjs","dev":"node server.mjs","test":"node --test"},"engines":{"node":">=22"},"dependencies":{"ws":"^8.18.3"}}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a1220"><title>Moon Salvage · Orbit of chaos</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<canvas id="game" aria-label="Moon Salvage live multiplayer arena"></canvas>
+<div id="hud">
+ <header class="topbar">
+  <div class="top-left"><div class="logo" title="Moon Salvage">✦</div><button id="chat-toggle" class="icon-button" aria-label="Toggle chat" aria-expanded="false">▤<span id="unread" class="hidden"></span></button><button id="help-toggle" class="icon-button" aria-label="How to play">?</button><div class="network"><i id="led"></i><span id="population">0 online</span><small id="ping">— ms</small></div></div>
+  <div class="round-pill"><small>ORBIT <b id="round">01</b></small><strong id="timer">03:00</strong></div>
+  <div class="top-right"><button id="invite" class="icon-button" aria-label="Copy invite link">↗</button><button id="sound" class="icon-button" aria-label="Toggle sound" aria-pressed="false">♪</button><button id="fullscreen" class="icon-button" aria-label="Fullscreen">⛶</button><button id="rank-toggle" class="icon-button" aria-label="Toggle leaderboard" aria-expanded="false">≡</button></div>
+ </header>
+ <section id="chat-panel" class="glass hidden" aria-label="Chat">
+  <div class="panel-title"><b>MOON COMMS</b><span>be nice. steal crystals.</span><button id="chat-close" aria-label="Close chat">×</button></div>
+  <div id="messages" role="log" aria-live="polite"><p class="system">Welcome to the moon. Press Enter or tap chat to talk.</p></div>
+  <form id="chat"><input id="chat-input" maxlength="100" placeholder="Say something…" aria-label="Chat message" autocomplete="off" disabled><button id="chat-send" aria-label="Send message" disabled>↑</button></form>
+  <div class="quick-chat"><button data-chat="Truce? ✌">✌ Truce?</button><button data-chat="Catch me!">↗ Catch me</button><button data-chat="Nice one! ♡">♡ Nice one</button></div>
+ </section>
+ <section id="leaderboard" class="glass hidden"><div class="panel-title"><b>TOP SCAVENGERS</b><button id="rank-close" aria-label="Close leaderboard">×</button></div><div id="crew"></div></section>
+ <div id="event-banner"><span>✧</span><div><b id="event-title">THE MIDNIGHT VAULT</b><small id="event-detail">Opens soon · bank in the center for 2× points</small></div></div>
+ <div id="power-status" class="hidden"></div>
+ <div id="toast" role="status"></div>
+ <div id="bank-guide"><span>⌂</span><b id="bank-distance">BANK</b></div>
+ <div class="bottom-hud">
+  <div class="cargo-card glass"><div class="cargo-top"><span>◆ <b id="cargo">0</b><small>/12</small></span><span id="score">0 <small>PTS</small></span></div><div id="cargo-meter"></div><div class="cargo-note" id="cargo-note">COLLECT · ESCAPE · BANK</div></div>
+  <div class="desktop-hint">WASD move <span>·</span> SPACE pulse <span>·</span> SHIFT dash <span>·</span> ENTER chat</div>
+ </div>
+ <div id="joystick" aria-label="Movement joystick"><div class="stick-ring"></div><span></span><small>MOVE</small></div>
+ <div class="abilities"><button id="dash" class="ability dash" aria-label="Dash"><span class="ability-symbol">↗</span><b>DASH</b><small id="dash-time">SHIFT</small><div class="cooldown"></div></button><button id="pulse" class="ability pulse" aria-label="Pulse"><span class="ability-symbol">◎</span><b>PULSE</b><small id="pulse-time">SPACE</small><div class="cooldown"></div></button></div>
+ <canvas id="minimap" width="160" height="120" aria-label="Minimap showing banks, vault, and players"></canvas>
+</div>
+<section id="landing" class="modal">
+ <div class="landing-card">
+  <div class="wordmark"><span>✦</span> MOON<span>SALVAGE</span><small>ORBIT OF CHAOS</small></div>
+  <div class="tag">MULTIPLAYER SPACE MISCHIEF</div><h1>Big moon.<br><em>Bad intentions.</em></h1>
+  <p>Grab the good stuff. Dash out of trouble.<br>Give your friends a little gravitational nudge.</p>
+  <form id="join"><label for="name">YOUR CALLSIGN</label><div class="join-row"><input id="name" maxlength="18" placeholder="Space gremlin" autocomplete="nickname" required><button id="join-button" type="submit">DROP IN <span>↗</span></button></div></form>
+  <div class="feature-pills"><span>◆ Collect & steal</span><span>☄ Meteor showers</span><span>◎ Power-ups</span></div>
+  <div class="how-strip"><div><b>01</b><span>Collect crystals<br>& burst supply crates.</span></div><div><b>02</b><span>Find a moving bank.<br>Full bag = bonus.</span></div><div><b>03</b><span>Risk the center vault<br>for double points.</span></div></div>
+  <div class="landing-foot"><span>Keyboard or touch. Bring your whole crew.</span><button id="landing-help">Controls ↗</button></div><p id="join-error" role="status"></p>
+ </div>
+</section>
+<section id="results" class="modal hidden"><div class="landing-card results-card"><div class="tag">ORBIT COMPLETE</div><h1 id="winner">What a haul.</h1><div id="result-list"></div><p id="next-round">Next orbit starts shortly. Stay for the rematch.</p></div></section>
+<section id="help" class="modal hidden"><div class="landing-card help-card"><button id="help-close" class="close" aria-label="Close help">×</button><div class="tag">A SCAVENGER’S FIELD GUIDE</div><h2>Make a little trouble.</h2><div class="help-grid"><p><b>◆ Find your fortune</b>Mint crystals = 1 cargo. Gold = 3. Carry 12, then bank at any active bank. Full bags earn +4 bonus points.</p><p><b>◎ Pulse & plunder</b>Space / PULSE knocks up to 4 cargo from nearby pilots and breaks supply crates. Recharge: 4 seconds.</p><p><b>↗ Get out of there</b>Shift / DASH launches you in your movement direction. Recharge: 3.2 seconds. Use it to dodge red meteor circles.</p><p><b>✧ Take a power trip</b>M = magnet pickup range, S = pulse/meteor shield, B = speed boost. Power-ups last 8.5 seconds.</p><p><b>◇ Risk the vault</b>The center vault opens for 12 seconds every 35 seconds and pays double. Everyone wants a piece.</p><p><b>⌂ Follow the banks</b>Four banks appear in random clear locations. They relocate one at a time, with an 8-second warning. Banks wait while a pilot is nearby. Your arrow and minimap always track their current position.</p><p><b>⚙ Fight the scrappers</b>Thieves steal 2 cargo; bruisers drop 3 and briefly stun you. Leave their orange attack circles or pulse to interrupt. Thieves take 2 hits, bruisers 3. Defeat them to recover stolen loot plus a bonus. Bank rings are safe from NPC attacks.</p><p><b>☄ Watch the sky</b>Red circles warn of an impact 2.4 seconds ahead. Meteors scatter valuable crystals. Dodge first, loot second.</p></div><div class="help-controls">WASD / arrows to move · Enter to chat<br>On mobile: left thumb to move, right thumb for abilities.<br>Use the minimap and bank arrow to find your way home.</div></div></section>
+<script type="module" src="/game.js"></script>
+</body></html>
+
